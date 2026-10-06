@@ -91,7 +91,8 @@ class GeoModel(Model):
                 house['Closest Store (Miles)'] if 'Closest Store (Miles)' in house else 0,  # distance_to_closest_store
                 house['Stores within 1 Mile'] if 'Stores within 1 Mile' in house else 0,  # num_store_within_mile
                 house['Food Access Score'] if 'Food Access Score' in house else 0,  # mfai
-                house['Color'] if 'Color' in house else None  # color (Coming from a previous model's step execution)
+                house['Color'] if 'Color' in house else None,  # color (Coming from a previous model's step execution)
+                house.get('Rural') if hasattr(house, 'get') else None,  # optional rural-tract flag
             )
             self.schedule.add(agent)
             self.space.add_agents(agent)
@@ -116,6 +117,13 @@ class GeoModel(Model):
                 "Driving time": "driving_time",
                 "Food Access Score": "mfai",
                 "Color": "color",
+                # FoodAPS-calibrated outputs (not yet persisted to the database)
+                "Poverty Ratio": "poverty_ratio",
+                "Monthly Trips": "monthly_trips",
+                "Rural": "rural",
+                "Supermarket Trip Probability": "spm_trip_prob",
+                "Low Liquid Assets Probability": "prob_low_assets",
+                "Food Insecurity Probability": "food_insecurity_prob",
             }
         )
         self.datacollector.collect(self)
